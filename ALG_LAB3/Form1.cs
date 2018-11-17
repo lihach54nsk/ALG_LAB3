@@ -18,6 +18,8 @@ namespace ALG_LAB3
         public Form1()
         {
             InitializeComponent();
+
+            
         }
 
         /* [DllImport("kernel32.dll", SetLastError = true)]
@@ -45,7 +47,13 @@ namespace ALG_LAB3
 
         private void PrintButton_Click(object sender, EventArgs e)
         {
+            dataGridView.ColumnCount = 1;
+            dataGridView.RowCount = 10001;
             var value = tree234.ToString();
+            for (int i = 0; i < 10000; i++)
+            {
+                dataGridView.Rows[i + 1].Cells[0].Value = value.Split(' ')[i];
+            }
         }
 
         private void trashButton_Click(object sender, EventArgs e)
