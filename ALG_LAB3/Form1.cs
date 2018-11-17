@@ -18,15 +18,17 @@ namespace ALG_LAB3
         public Form1()
         {
             InitializeComponent();
+
+            //chart1.Series[0]
         }
 
-       /* [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool AllocConsole();
+        /* [DllImport("kernel32.dll", SetLastError = true)]
+         [return: MarshalAs(UnmanagedType.Bool)]
+         private static extern bool AllocConsole();
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool FreeConsole();*/
+         [DllImport("kernel32.dll", SetLastError = true)]
+         [return: MarshalAs(UnmanagedType.Bool)]
+         private static extern bool FreeConsole();*/
 
         Tree234<string> tree234 = new Tree234<string>();
 
@@ -38,19 +40,14 @@ namespace ALG_LAB3
             stopwatch.Start();
             tree234.Add(textBox.Text);
             stopwatch.Stop();
-            var time = stopwatch.ElapsedMilliseconds;
+            var time = stopwatch.ElapsedTicks;
             count++;
-            chart1.Series[0].Points.AddXY(count, Convert.ToDouble(time));
+            chart1.Series[0].Points.Add(Convert.ToDouble(time));
         }
 
         private void PrintButton_Click(object sender, EventArgs e)
         {
-           /* if (AllocConsole())
-            {*/
-                tree234.PrintTree();
-               /* Console.ReadLine();
-                FreeConsole();
-            }*/
+            tree234.PrintTree();
         }
     }
 }
