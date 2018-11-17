@@ -18,8 +18,6 @@ namespace ALG_LAB3
         public Form1()
         {
             InitializeComponent();
-
-            //chart1.Series[0]
         }
 
         /* [DllImport("kernel32.dll", SetLastError = true)]
@@ -30,7 +28,7 @@ namespace ALG_LAB3
          [return: MarshalAs(UnmanagedType.Bool)]
          private static extern bool FreeConsole();*/
 
-        Tree234<string> tree234 = new Tree234<string>();
+        Tree234<int> tree234 = new Tree234<int>();
 
         double count = 0;
 
@@ -38,7 +36,7 @@ namespace ALG_LAB3
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            tree234.Add(textBox.Text);
+            tree234.Add(Convert.ToInt32(textBox.Text));
             stopwatch.Stop();
             var time = stopwatch.ElapsedTicks;
             count++;
@@ -48,6 +46,20 @@ namespace ALG_LAB3
         private void PrintButton_Click(object sender, EventArgs e)
         {
             var value = tree234.ToString();
+        }
+
+        private void trashButton_Click(object sender, EventArgs e)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            for (int i = 0; i < 10000; i++)
+            {
+                stopwatch.Start();
+                tree234.Add(i);
+                stopwatch.Stop();
+                var time = stopwatch.ElapsedTicks;
+                stopwatch.Reset();
+                chart1.Series[0].Points.Add(Convert.ToDouble(time));
+            }
         }
     }
 }

@@ -35,6 +35,7 @@
             this.AddButton = new System.Windows.Forms.Button();
             this.textBox = new System.Windows.Forms.TextBox();
             this.PrintButton = new System.Windows.Forms.Button();
+            this.trashButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,19 +45,19 @@
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(12, 12);
+            this.chart1.Location = new System.Drawing.Point(12, 7);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(300, 300);
+            this.chart1.Size = new System.Drawing.Size(641, 532);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart";
             // 
             // AddButton
             // 
-            this.AddButton.Location = new System.Drawing.Point(318, 38);
+            this.AddButton.Location = new System.Drawing.Point(659, 33);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(183, 23);
             this.AddButton.TabIndex = 1;
@@ -66,14 +67,14 @@
             // 
             // textBox
             // 
-            this.textBox.Location = new System.Drawing.Point(318, 12);
+            this.textBox.Location = new System.Drawing.Point(659, 7);
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(183, 20);
             this.textBox.TabIndex = 2;
             // 
             // PrintButton
             // 
-            this.PrintButton.Location = new System.Drawing.Point(318, 67);
+            this.PrintButton.Location = new System.Drawing.Point(659, 91);
             this.PrintButton.Name = "PrintButton";
             this.PrintButton.Size = new System.Drawing.Size(183, 23);
             this.PrintButton.TabIndex = 3;
@@ -81,11 +82,22 @@
             this.PrintButton.UseVisualStyleBackColor = true;
             this.PrintButton.Click += new System.EventHandler(this.PrintButton_Click);
             // 
+            // trashButton
+            // 
+            this.trashButton.Location = new System.Drawing.Point(659, 62);
+            this.trashButton.Name = "trashButton";
+            this.trashButton.Size = new System.Drawing.Size(183, 23);
+            this.trashButton.TabIndex = 4;
+            this.trashButton.Text = "Насрать";
+            this.trashButton.UseVisualStyleBackColor = true;
+            this.trashButton.Click += new System.EventHandler(this.trashButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 328);
+            this.ClientSize = new System.Drawing.Size(854, 551);
+            this.Controls.Add(this.trashButton);
             this.Controls.Add(this.PrintButton);
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.AddButton);
@@ -104,6 +116,7 @@
         private System.Windows.Forms.Button AddButton;
         private System.Windows.Forms.TextBox textBox;
         private System.Windows.Forms.Button PrintButton;
+        private System.Windows.Forms.Button trashButton;
     }
 }
 
