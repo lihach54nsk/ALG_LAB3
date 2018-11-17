@@ -152,12 +152,35 @@ namespace LinkedListApp
             }
         }
 
+        static void ConvertTreeToLinkedList(Node root, LinkedList<T> list)
+        {
+            for (int i = 0; i < root.Count; i++)
+            {
+                if (root.nextNodes[i] != null)
+                {
+                    ConvertTreeToLinkedList(root.nextNodes[i], list);
+                }
+                list.AddLast(new LinkedListNode<T>(root.values[i]));
+            }
+            if (root.nextNodes[root.Count] != null)
+            {
+                ConvertTreeToLinkedList(root.nextNodes[root.Count], list);
+            }
+        }
+
         public override string ToString()
         {
             int counter = 0;
             var sb = new StringBuilder();
             PrintTree(_root, ref counter, sb);
             return sb.ToString();
+        }
+
+        public LinkedList<T> GetLinkedList()
+        {
+            var list = new LinkedList<T>();
+            ConvertTreeToLinkedList(_root, list);
+            return list;
         }
     }
 }
