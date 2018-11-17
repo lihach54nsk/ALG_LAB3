@@ -47,7 +47,7 @@ namespace ALG_LAB3
 
         private void PrintButton_Click(object sender, EventArgs e)
         {
-            tree234.PrintTree();
+            var value = tree234.ToString();
         }
     }
 }

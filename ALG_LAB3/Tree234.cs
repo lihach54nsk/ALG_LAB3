@@ -9,23 +9,25 @@ namespace LinkedListApp
     {
         class Node
         {
-            public readonly List<T> values = new List<T>(3);
+            public readonly T[] values = new T[3];
             public readonly Node[] nextNodes = new Node[4];
 
-            public int Count => values.Count;
+            public int Count { get; set; }
 
             public Node() { }
 
             public Node(Node left, Node right, T value)
             {
-                values.Add(value);
+                values[0] = value;
+                Count++;
+                //values.Add(value);
                 nextNodes[0] = left;
                 nextNodes[1] = right;
             }
 
             public void AddNodeData(Node node)
             {
-                if (values.Count > 2) throw new Exception();
+                if (Count > 2) throw new Exception();
                 var targetPos = GetTargetPos(node.values[0]);
                 InsertNode(targetPos, node);
             }
@@ -33,9 +35,10 @@ namespace LinkedListApp
             //Предполагается, что здесь не будет нижележащих узлов
             public void AddValue(T value)
             {
-                if (values.Count > 2) throw new Exception();
+                if (Count > 2) throw new Exception();
                 var targetPos = GetTargetPos(value);
-                values.Insert(targetPos, value);
+                InsertValue(targetPos, value);
+                //values.Insert(targetPos, value);
             }
 
             public int GetTargetPos(T value)
@@ -56,7 +59,8 @@ namespace LinkedListApp
                 {
 
                 }
-                values.Insert(index, node.values[0]);
+                InsertValue(index, node.values[0]);
+                //values.Insert(index, node.values[0]);
                 MoveNodes(index, 1);
                 nextNodes[index] = node.nextNodes[0];
                 nextNodes[index + 1] = node.nextNodes[1];
@@ -66,6 +70,20 @@ namespace LinkedListApp
             {
                 for (var i = 3 - count; i >= pos; i--)
                     nextNodes[i + count] = nextNodes[i];
+            }
+
+            private static void MoveValues(T[] arr, int pos)
+            {
+                var capacity = arr.Length;
+                for (var i = capacity-2; i >= pos; i--)
+                    arr[i + 1] = arr[i];
+            }
+
+            private void InsertValue(int index, T value)
+            {
+                MoveValues(values, index);
+                values[index] = value;
+                Count++;
             }
         }
 
@@ -117,28 +135,29 @@ namespace LinkedListApp
 
         public void Add(T value) => Add(_root, null, value, _deep);
 
-        static void PrintTree(Node root, ref int counter)
+        static void PrintTree(Node root, ref int counter, StringBuilder stringBuilder)
         {
             for (int i = 0; i < root.Count; i++)
             {
                 if (root.nextNodes[i] != null)
                 {
-                    PrintTree(root.nextNodes[i], ref counter);
+                    PrintTree(root.nextNodes[i], ref counter, stringBuilder);
                 }
-                Console.WriteLine(root.values[i]);
+                stringBuilder.Append(root.values[i]).Append(' ');
                 counter++;
             }
             if (root.nextNodes[root.Count] != null)
             {
-                PrintTree(root.nextNodes[root.Count], ref counter);
+                PrintTree(root.nextNodes[root.Count], ref counter, stringBuilder);
             }
         }
 
-        public void PrintTree()
+        public override string ToString()
         {
             int counter = 0;
-            PrintTree(_root, ref counter);
-            Console.WriteLine($"Vsego {counter} chisel");
+            var sb = new StringBuilder();
+            PrintTree(_root, ref counter, sb);
+            return sb.ToString();
         }
     }
 }
