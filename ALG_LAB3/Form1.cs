@@ -17,9 +17,7 @@ namespace ALG_LAB3
     {
         public Form1()
         {
-            InitializeComponent();
-
-            
+            InitializeComponent();            
         }
 
         /* [DllImport("kernel32.dll", SetLastError = true)]
