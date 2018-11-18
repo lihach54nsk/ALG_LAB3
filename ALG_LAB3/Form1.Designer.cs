@@ -90,7 +90,7 @@
             this.trashButton.Name = "trashButton";
             this.trashButton.Size = new System.Drawing.Size(183, 23);
             this.trashButton.TabIndex = 4;
-            this.trashButton.Text = "Насрать";
+            this.trashButton.Text = "Заполнить";
             this.trashButton.UseVisualStyleBackColor = true;
             this.trashButton.Click += new System.EventHandler(this.trashButton_Click);
             // 

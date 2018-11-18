@@ -17,7 +17,7 @@ namespace ALG_LAB3
     {
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         Tree234<int> tree234 = new Tree234<int>();
