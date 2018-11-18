@@ -45,6 +45,8 @@ namespace ALG_LAB3
 
         private void PrintButton_Click(object sender, EventArgs e)
         {
+            var list = tree234.GetLinkedList();
+
             dataGridView.ColumnCount = 1;
             dataGridView.RowCount = 10001;
             var value = tree234.ToString();
