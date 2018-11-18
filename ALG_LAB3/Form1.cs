@@ -18,17 +18,7 @@ namespace ALG_LAB3
         public Form1()
         {
             InitializeComponent();
-
-            
         }
-
-        /* [DllImport("kernel32.dll", SetLastError = true)]
-         [return: MarshalAs(UnmanagedType.Bool)]
-         private static extern bool AllocConsole();
-
-         [DllImport("kernel32.dll", SetLastError = true)]
-         [return: MarshalAs(UnmanagedType.Bool)]
-         private static extern bool FreeConsole();*/
 
         Tree234<int> tree234 = new Tree234<int>();
 
@@ -49,12 +39,16 @@ namespace ALG_LAB3
         {
             var list = tree234.GetLinkedList();
 
+            if (list.Count == 0) return;
+
             dataGridView.ColumnCount = 1;
-            dataGridView.RowCount = 10001;
-            var value = tree234.ToString();
-            for (int i = 0; i < 10000; i++)
-            {
-                dataGridView.Rows[i + 1].Cells[0].Value = value.Split(' ')[i];
+            dataGridView.RowCount = list.Count;
+
+            var counter = 0;
+
+            foreach (var item in list)
+            { 
+                dataGridView.Rows[counter++].Cells[0].Value = item.ToString();
             }
         }
 
