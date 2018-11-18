@@ -55,13 +55,14 @@ namespace ALG_LAB3
         private void trashButton_Click(object sender, EventArgs e)
         {
             Stopwatch stopwatch = new Stopwatch();
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000000; i++)
             {
                 stopwatch.Start();
                 tree234.Add(i);
                 stopwatch.Stop();
                 var time = stopwatch.ElapsedTicks;
                 stopwatch.Reset();
+                //if (time > 5000) continue;
                 chart1.Series[0].Points.Add(Convert.ToDouble(time));
             }
         }
