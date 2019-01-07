@@ -15,9 +15,28 @@ namespace ALG_LAB3
 {
     public partial class Form1 : Form
     {
+        private readonly Random random = new Random();
+
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            tree234 = new Tree234<int>();
+            tree234.Add(191);
+            tree234.Add(12);
+            tree234.Add(45);
+            tree234.Add(14);
+            tree234.Add(193);
+            tree234.Add(75);
+            tree234.Add(56);
+            tree234.Add(5);
+            tree234.Remove(12);
+            tree234.Remove(191);
+            tree234.Remove(45);
+            tree234.Remove(14);
+            tree234.Remove(193);
+            tree234.Remove(75);
+            tree234.Remove(56);
+            tree234.Remove(5);
         }
 
         Tree234<int> tree234 = new Tree234<int>();
@@ -55,15 +74,20 @@ namespace ALG_LAB3
         private void trashButton_Click(object sender, EventArgs e)
         {
             Stopwatch stopwatch = new Stopwatch();
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 50; i++)
             {
-                stopwatch.Start();
-                tree234.Add(i);
-                stopwatch.Stop();
-                var time = stopwatch.ElapsedTicks;
-                stopwatch.Reset();
-                //if (time > 5000) continue;
-                chart1.Series[0].Points.Add(Convert.ToDouble(time));
+                long sum = 0;
+                for (int j = 0; j < 200000; j++)
+                {
+                    stopwatch.Start();
+                    tree234.Add(random.Next());
+                    stopwatch.Stop();
+                    sum += stopwatch.ElapsedTicks;
+                    stopwatch.Reset();
+                }
+                var midTime = (double)sum / 10000.0;
+
+                chart1.Series[0].Points.Add(midTime);
             }
         }
     }

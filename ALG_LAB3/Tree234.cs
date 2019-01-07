@@ -9,8 +9,8 @@ namespace LinkedListApp
     {
         class Node
         {
-            public readonly T[] values = new T[3];
-            public readonly Node[] nextNodes = new Node[4];
+            public readonly T[] _values = new T[3];
+            public readonly Node[] _nextNodes = new Node[4];
 
             public int Count { get; set; }
 
@@ -18,17 +18,24 @@ namespace LinkedListApp
 
             public Node(Node left, Node right, T value)
             {
-                values[0] = value;
+                _values[0] = value;
                 Count++;
-                //values.Add(value);
-                nextNodes[0] = left;
-                nextNodes[1] = right;
+
+                _nextNodes[0] = left;
+                _nextNodes[1] = right;
+            }
+
+            public Node(T[] values, Node[] nextNodes, int count)
+            {
+                _values = values;
+                _nextNodes = nextNodes;
+                Count = count;
             }
 
             public void AddNodeData(Node node)
             {
                 if (Count > 2) throw new Exception();
-                var targetPos = GetTargetPos(node.values[0]);
+                var targetPos = GetTargetPos(node._values[0]);
                 InsertNode(targetPos, node);
             }
 
@@ -45,7 +52,7 @@ namespace LinkedListApp
             {
                 for (int i = 0; i < Count; i++)
                 {
-                    if (values[i].CompareTo(value) > 0)
+                    if (_values[i].CompareTo(value) > 0)
                     {
                         return i;
                     }
@@ -53,23 +60,114 @@ namespace LinkedListApp
                 return Count;
             }
 
+            public bool RemoveKey(T value)
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    if (value.CompareTo(_values[i]) == 0)
+                    {
+                        RemoveAtPostion(i);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public void MergeChild(int pos)
+            {
+                var tempValues = new T[3] 
+                {
+                    _nextNodes[pos]._values[0],
+                    _values[pos],
+                    _nextNodes[pos+1]._values[0],
+                };
+
+                var tempNodes = new Node[4]
+                {
+                    _nextNodes[pos]._nextNodes[0],
+                    _nextNodes[pos]._nextNodes[1],
+                    _nextNodes[pos+1]._nextNodes[0],
+                    _nextNodes[pos+1]._nextNodes[0],
+                };
+
+                _nextNodes[pos] = new Node(tempValues, tempNodes, 3);
+
+                Count--;
+
+                for (int i = pos+1; i < Count; i++)
+                {
+                    _values[i] = _values[i + 1];
+                }
+
+                for (int i = pos + 1; i <= Count; i++)
+                {
+                    _nextNodes[i] = _nextNodes[i + 1];
+                }
+            }
+
+            public void TransactRight(int pos)
+            {
+                var right = _nextNodes[pos + 1];
+                var left = _nextNodes[pos];
+
+                right._values[1] = right._values[0];
+                right._values[0] = _values[pos];
+
+                for (int i = 0; i < 3; i++)
+                {
+                    right._nextNodes[i + 1] = right._nextNodes[i];
+                }
+
+                right._nextNodes[0] = left._nextNodes[left.Count];
+                right.Count++;
+
+                _values[pos] = left._values[left.Count - 1];
+
+                left.Count--;
+            }
+
+            public void TransactLeft(int pos)
+            {
+                var right = _nextNodes[pos + 1];
+                var left = _nextNodes[pos];
+
+                left.Count++;
+
+                left._values[left.Count - 1] = _values[pos];
+                left._nextNodes[left.Count] = right._nextNodes[0];
+
+                _values[pos] = right._values[0];
+
+                right._values[0] = right._values[1];
+                for (int i = 0; i < 3; i++)
+                {
+                    right._nextNodes[i] = right._nextNodes[i + 1];
+                }
+
+                right.Count--;
+            }
+
+            private void RemoveAtPostion(int pos)
+            {
+                for (int j = pos; j < Count - 1; j++)
+                {
+                    _values[j] = _values[j + 1];
+                }
+                Count--;
+            }
+
             private void InsertNode(int index, Node node)
             {
-                if (index < 2)
-                {
-
-                }
-                InsertValue(index, node.values[0]);
-                //values.Insert(index, node.values[0]);
+                InsertValue(index, node._values[0]);
                 MoveNodes(index, 1);
-                nextNodes[index] = node.nextNodes[0];
-                nextNodes[index + 1] = node.nextNodes[1];
+                _nextNodes[index] = node._nextNodes[0];
+                _nextNodes[index + 1] = node._nextNodes[1];
             }
 
             private void MoveNodes(int pos, int count)
             {
                 for (var i = 3 - count; i >= pos; i--)
-                    nextNodes[i + count] = nextNodes[i];
+                    _nextNodes[i + count] = _nextNodes[i];
             }
 
             private static void MoveValues(T[] arr, int pos)
@@ -81,8 +179,8 @@ namespace LinkedListApp
 
             private void InsertValue(int index, T value)
             {
-                MoveValues(values, index);
-                values[index] = value;
+                MoveValues(_values, index);
+                _values[index] = value;
                 Count++;
             }
         }
@@ -118,7 +216,88 @@ namespace LinkedListApp
             }
 
             var targetPos = node.GetTargetPos(value);
-            Add(node.nextNodes[targetPos], node, value, high - 1);
+            Add(node._nextNodes[targetPos], node, value, high - 1);
+        }
+
+        private bool Remove(Node node, T value, int high)
+        {
+            if (high == _deep && _deep != 0 && node.Count == 1 && node._nextNodes[0].Count == 1
+                && node._nextNodes[1].Count == 1)
+            {
+                var valuesTemp = new T[3] 
+                {
+                    node._nextNodes[0]._values[0],
+                    node._values[0],
+                    node._nextNodes[1]._values[0]
+                };
+
+                var nodesTemp = new Node[4]
+                {
+                    node._nextNodes[0]._nextNodes[0],
+                    node._nextNodes[0]._nextNodes[1],
+                    node._nextNodes[1]._nextNodes[0],
+                    node._nextNodes[1]._nextNodes[1],
+                };
+
+                _deep--;
+                _root = new Node(valuesTemp, nodesTemp, 3);
+
+                return Remove(_root, value, _deep);
+            }
+
+            if(high == 0)
+            {
+                return node.RemoveKey(value);
+            }
+
+            if (node._values[0].CompareTo(value) > 0)
+            {
+                if (node._nextNodes[0].Count == 1 && node._nextNodes[1].Count == 1)
+                {
+                    node.MergeChild(0);
+                }
+                else if (node._nextNodes[1].Count == 1)
+                {
+                    node.TransactLeft(0);
+                }
+
+                return Remove(node._nextNodes[0], value, high - 1);
+            }
+
+            for (int i = node.Count - 1; i >= 0; i--)
+            {
+                if (node._nextNodes[i].Count == 1 && node._nextNodes[i + 1].Count == 1)
+                {
+                    node.MergeChild(i);
+                }
+                else if (node._nextNodes[i + 1].Count == 1)
+                {
+                    node.TransactRight(i);
+                }
+
+                if (node._values[i].CompareTo(value) == 0)
+                {
+                    node._values[i] = SwapWithLeaf(node._nextNodes[i + 1], value, high - 1);
+                    return true;
+                }
+
+                if(node._values[i].CompareTo(value) < 0)
+                {
+                    return Remove(node._nextNodes[i + 1], value, high - 1);
+                }
+            }
+            return false;
+        }
+
+        private T SwapWithLeaf(Node node, T value, int heigh)
+        {
+            if(heigh != 0)
+            {
+                return SwapWithLeaf(node._nextNodes[0], value, heigh - 1);
+            }
+            var temp = node._values[0];
+            node.RemoveKey(temp);
+            return temp;
         }
 
         static Node Split(Node node)
@@ -127,28 +306,30 @@ namespace LinkedListApp
 
             return new Node
                 (
-                    new Node(node.nextNodes[0], node.nextNodes[1], node.values[0]),
-                    new Node(node.nextNodes[2], node.nextNodes[3], node.values[2]),
-                    node.values[1]
+                    new Node(node._nextNodes[0], node._nextNodes[1], node._values[0]),
+                    new Node(node._nextNodes[2], node._nextNodes[3], node._values[2]),
+                    node._values[1]
                 );
         }
 
         public void Add(T value) => Add(_root, null, value, _deep);
 
+        public bool Remove(T value) => Remove(_root, value, _deep);
+
         static void PrintTree(Node root, ref int counter, StringBuilder stringBuilder)
         {
             for (int i = 0; i < root.Count; i++)
             {
-                if (root.nextNodes[i] != null)
+                if (root._nextNodes[i] != null)
                 {
-                    PrintTree(root.nextNodes[i], ref counter, stringBuilder);
+                    PrintTree(root._nextNodes[i], ref counter, stringBuilder);
                 }
-                stringBuilder.Append(root.values[i]).Append(' ');
+                stringBuilder.Append(root._values[i]).Append(' ');
                 counter++;
             }
-            if (root.nextNodes[root.Count] != null)
+            if (root._nextNodes[root.Count] != null)
             {
-                PrintTree(root.nextNodes[root.Count], ref counter, stringBuilder);
+                PrintTree(root._nextNodes[root.Count], ref counter, stringBuilder);
             }
         }
 
@@ -156,15 +337,15 @@ namespace LinkedListApp
         {
             for (int i = 0; i < root.Count; i++)
             {
-                if (root.nextNodes[i] != null)
+                if (root._nextNodes[i] != null)
                 {
-                    ConvertTreeToLinkedList(root.nextNodes[i], list);
+                    ConvertTreeToLinkedList(root._nextNodes[i], list);
                 }
-                list.AddLast(new LinkedListNode<T>(root.values[i]));
+                list.AddLast(new LinkedListNode<T>(root._values[i]));
             }
-            if (root.nextNodes[root.Count] != null)
+            if (root._nextNodes[root.Count] != null)
             {
-                ConvertTreeToLinkedList(root.nextNodes[root.Count], list);
+                ConvertTreeToLinkedList(root._nextNodes[root.Count], list);
             }
         }
 
